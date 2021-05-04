@@ -21,8 +21,8 @@ export class ApiErrors {
 export async function apiFetch(endpoint, options = {}) {
     options = {
         headers: {
-            Accept: 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Accept': 'application/json, text/plain',
+            'Content-Type': 'application/json;charset=UTF-8'
         },
         ...options
     }
@@ -30,16 +30,21 @@ export async function apiFetch(endpoint, options = {}) {
         options.body = JSON.stringify(options.body)
         options.headers['Content-Type'] = 'application/json'
     }
-    const response = await fetch('http://127.0.0.1' + endpoint, options)
-    if (response.status === 204) {
-        return null;
-    }
-    const responseData = await response.json()
-    if (response.ok) {
-        return responseData;
-    } else {
-        if (responseData.errors) {
-            throw new ApiErrors(responseData.errors)
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api' + endpoint, options)
+        if (response.status === 204) {
+            return null;
         }
+        const responseData = await response.json()
+        if (response.ok) {
+            return responseData;
+        } else {
+            if (responseData.errors) {
+                throw new ApiErrors('API_ERROR' + responseData.errors)
+            }
+        }
+    } catch (error) {
+        throw new Error('Erreur de connexion attrapée : ' + error.message)
     }
+
 }
