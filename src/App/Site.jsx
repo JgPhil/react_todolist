@@ -14,7 +14,7 @@ export function Site() {
   const [addCategory, toggleAddCategory] = useToggle(false);
   const [detailShow, toggleDetailShow] = useToggle(false)
   const { todos, fetchTodos, fetchOneTodo, createTodo } = useTodos();
-  const { categories, deleteCategory,updateCategory, fetchCategories, createCategory } = useCategories();
+  const { categories, deleteCategory, updateCategory, fetchCategories, createCategory } = useCategories();
 
 
   useEffect(() => {
@@ -25,7 +25,10 @@ export function Site() {
 
   return (
     <>
-      <NavBar onNewTodoClick={toggleAddTodo} onNewCategoryClick={toggleAddCategory} />
+      <NavBar
+        onNewTodoClick={toggleAddTodo}
+        onNewCategoryClick={toggleAddCategory}
+        createCategory={createCategory} />
       <Container>
         {addTodo && (
           <Modal title="Créer un Todo" onClose={toggleAddTodo}>

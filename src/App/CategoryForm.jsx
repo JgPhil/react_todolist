@@ -9,8 +9,10 @@ export function CategoryForm({ categories, createCategory, deleteCategory, updat
     const [input, setInput] = useState(null)
     const [update, toggleUpdate] = useToggle(false)
     const [current, setCurrent] = useState(null)
+    const [addCategory, toggleAddCategory] = useToggle(false)
+    const [updateGlobal, toggleUpdateGlobal] = useToggle(false)
 
-    const handleSubmit = async function (e) {
+    const handleSubmitCategory = async function (e) {
         e.preventDefault()
         const formData = new FormData(e.target),
             formDataObj = Object.fromEntries(formData.entries())
@@ -30,11 +32,35 @@ export function CategoryForm({ categories, createCategory, deleteCategory, updat
     }
 
     const handleToggle = function (c) {
+        if (addCategory) {
+            toggleAddCategory()
+        }
         setCurrent(c)
         toggleUpdate()
     }
 
     return <>
+        <Button size="sm" className="mb-2" onClick={() => {
+            if (update) {
+                toggleUpdate()
+            }
+            toggleAddCategory()
+        }
+        }>
+            {addCategory ?
+                <Image src="images/lettre-x.png" /> :
+                <Image src="images/plus.png" />
+            }
+        </Button>
+        {
+            addCategory &&
+            <Form className="mb-4" onSubmit={handleSubmitCategory}>
+                <Form.Group controlId="CategoryTitle">
+                    <Form.Control name="title" type="text" placeholder="Veuillez entrer le titre de la catégorie" />
+                </Form.Group>
+                <Button type="submit">Envoyer</Button>
+            </Form>
+        }
         <ListGroup as="ul">
             {
                 categories.map(c =>
@@ -52,38 +78,26 @@ export function CategoryForm({ categories, createCategory, deleteCategory, updat
                                         />
                                     </InputGroup>
                                     <Button type="submit" className="btn-sm mr-5" onClick={() => handleUpdate(c)}>
-                                    Modifier
+                                        Modifier
                                    </Button>
                                 </>
                                 :
                                 ''}
                         <a className="ml-auto" onClick={() => handleToggle(c)}>
                             {
-                                update && c === current?
-                                <Image src="images/lettre-x.png" />
-                                :
-                                <Image src="images/pen.png" />
+                                update && c === current ?
+                                    <Image src="images/lettre-x.png" />
+                                    :
+                                    <Image src="images/pen.png" />
                             }
-                            
+
                         </a>
 
                         <a className="ml-2" onClick={() => deleteCategory(c)}>
                             <Image src="images/trash.png" />
                         </a>
                     </ListGroup.Item>)
-
             }
         </ListGroup>
-        <Form onSubmit={handleSubmit}>
-            <Form.Group className="mt-5" controlId="CategoryTitle">
-                <Form.Label className="font-weight-bold">Ajouter une catégorie de Todo</Form.Label>
-                <Form.Control name="title" type="text" placeholder="Veuillez entrer le titre de la catégorie" />
-            </Form.Group>
-            <Button type="submit">Envoyer</Button>
-        </Form>
-
-
-
-
     </>
 }
