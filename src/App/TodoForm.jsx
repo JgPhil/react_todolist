@@ -2,7 +2,7 @@ import { Button, Form } from "react-bootstrap";
 
 
 export function TodoForm({ categories, createTodo }) {
-    const handleSubmit = function (event) {
+    const handleSubmit = async function (event) {
         event.preventDefault()
         const formData = new FormData(event.target)
         const formDataObj = Object.fromEntries(formData.entries())

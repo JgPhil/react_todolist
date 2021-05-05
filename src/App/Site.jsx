@@ -14,7 +14,7 @@ export function Site() {
   const [addCategory, toggleAddCategory] = useToggle(false);
   const [detailShow, toggleDetailShow] = useToggle(false)
   const { todos, fetchTodos, fetchOneTodo, createTodo } = useTodos();
-  const { categories, deleteCategory, fetchCategories, createCategory } = useCategories();
+  const { categories, deleteCategory,updateCategory, fetchCategories, createCategory } = useCategories();
 
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export function Site() {
               categories={categories}
               createCategory={createCategory}
               deleteCategory={deleteCategory}
-              onNewCategoryClick={toggleAddCategory}
+              updateCategory={updateCategory}
             />
           </Modal>
         )}
